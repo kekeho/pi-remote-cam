@@ -9,6 +9,9 @@ app.config['SECRET_KEY'] = str(uuid.uuid4)
 socketio = SocketIO(app, async_mode='threading')
 thread = None
 
+camera = video.CamThread()
+camera.start()
+
 @app.route('/') 
 def index(): 
     return render_template('index.html')
@@ -16,7 +19,7 @@ def index():
 
 @app.route('/stream.mpeg') 
 def video_feed(): 
-    return Response(video.video_frame_gen(), 
+    return Response(camera.get_frame(), 
                     mimetype='multipart/x-mixed-replace; boundary=frame') 
 
 if __name__ == '__main__': 
