@@ -1,3 +1,8 @@
+# Copyright (c) 2019 Hiroki Takemura (kekeho)
+# 
+# This software is released under the MIT License.
+# https://opensource.org/licenses/MIT
+
 from flask import Flask, render_template, Response
 from flask_socketio import SocketIO, emit, send
 import uuid
