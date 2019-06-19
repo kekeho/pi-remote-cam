@@ -33,6 +33,17 @@ def shot(message):
     camera.shot()
 
 
+@socketio.on('interval-shot', namespace='/socket')
+def interval_shot(message):
+    sec = int(message['sec'])
+    camera.set_interval(sec)
+
+
+@socketio.on('stop-interval', namespace='/socket')
+def stop_interval(message):
+    camera.clear_interval()
+
+
 @socketio.on('get-all-taken-images', namespace='/socket')
 def send_all_taken_images(message):
     emit('new-images', list(camera.taken_photos), namespace='/socket')

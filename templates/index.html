@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="collapsibleNavId">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Settings</a>
+                    <a class="nav-link" href="https://github.com/kekeho/pi-remote-cam">Settings</a>
                 </li>
             </ul>
         </div>
@@ -38,8 +38,14 @@
     </div>
 
     <div class="row buttons">
-        <div class="col">
-            <button id="shot" class="btn btn-primary btn-lg">Shot</button>
+        <div class="col col-4">
+            <button id="shot" class="btn btn-danger btn-lg">Shot</button>
+        </div>
+        <div class="col col-4">
+            <input type="text" name="interval-sec" id="interval-sec" placeholder="interval sec">
+        </div>
+        <div class="col col-4">
+            <button id="interval-shot" shooting='false' class="btn btn-dark btn-lg">Interval Shot</button>
         </div>
     </div>
 
