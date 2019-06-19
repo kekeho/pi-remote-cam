@@ -3,9 +3,11 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, redirect
 from flask_socketio import SocketIO, emit, send
 import uuid
+import zipfile
+from datetime import datetime
 from lib import video
 
 app = Flask(__name__)
@@ -26,6 +28,16 @@ def index():
 def video_feed(): 
     return Response(camera.get_frame(), 
                     mimetype='multipart/x-mixed-replace; boundary=frame') 
+
+
+@app.route('/download')
+def download():
+    filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.zip'
+    print(filename)
+    with zipfile.ZipFile('static/zipfiles/' + filename, 'w', compression=zipfile.ZIP_DEFLATED) as zipfp:
+        [ zipfp.write(p, arcname=p.split('/')[-1]) for p in camera.taken_photos ]
+    
+    return redirect('/static/zipfiles/' + filename)
 
 
 @socketio.on('shot', namespace='/socket')

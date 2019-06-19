@@ -16,11 +16,11 @@ let interval_sec_param = document.getElementById('interval-sec');
 interval_shot_button.onclick = function() {
     if (interval_shot_button.attributes['shooting'].nodeValue === 'false'){
         socket.emit('interval-shot', {'sec': interval_sec_param.value});
-        interval_shot_button.innerText = 'Stop Interval';
+        interval_shot_button.innerText = 'Stop';
         interval_shot_button.setAttribute('shooting', 'true');
     } else {
         socket.emit('stop-interval', {});
-        interval_shot_button.innerText = 'Interval Shot';
+        interval_shot_button.innerText = 'Interval';
         interval_shot_button.setAttribute('shooting', 'false');
     }
 };
