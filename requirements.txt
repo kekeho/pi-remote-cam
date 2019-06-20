@@ -8,3 +8,4 @@ python-engineio==3.8.1
 python-socketio==4.1.0
 six==1.12.0
 Werkzeug==0.15.4
+picamera==1.13
