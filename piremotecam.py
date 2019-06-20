@@ -1,5 +1,5 @@
 # Copyright (c) 2019 Hiroki Takemura (kekeho)
-# 
+#
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
@@ -12,54 +12,66 @@ import os
 from glob import glob
 from lib import video
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = str(uuid.uuid4)
 
-socketio = SocketIO(app, async_mode='threading')
-thread = None
+app = Flask(__name__)  # Flask app
+app.config['SECRET_KEY'] = str(uuid.uuid4)  # Gen random secret key
 
+socketio = SocketIO(app, async_mode='threading')  # socketio server
+thread = None  # for contain thread list
+
+# Generate camera instance
 camera = video.CamThread(save_dir='static/taken_images', socketio=socketio)
 camera.start()
 
-@app.route('/') 
-def index(): 
+
+@app.route('/')
+def index():
+    """Index page"""
     return render_template('index.html')
 
 
-@app.route('/stream.mpeg') 
-def video_feed(): 
-    return Response(camera.get_frame(), 
-                    mimetype='multipart/x-mixed-replace; boundary=frame') 
+@app.route('/stream.mpeg')
+def video_feed():
+    """Stream realtime preview"""
+    return Response(camera.get_frame(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/download')
 def download():
-    filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.zip'
-    print(filename)
+    """Generate ZIP which contains taken images"""
+    filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + \
+        '.zip'  # '2019-06-20-23-21-49.zip'
+    # Insert taken images to zipfile
     with zipfile.ZipFile('static/zipfiles/' + filename, 'w', compression=zipfile.ZIP_DEFLATED) as zipfp:
-        [ zipfp.write(p, arcname=p.split('/')[-1]) for p in camera.taken_photos ]
-    
+        [zipfp.write(p, arcname=p.split('/')[-1]) for p in camera.taken_photos]
+
+    # Redirect to download link
     return redirect('/static/zipfiles/' + filename)
 
 
 @socketio.on('shot', namespace='/socket')
-def shot(message):
+def shot(message: dict):
+    """Take a pic"""
     camera.shot()
 
 
 @socketio.on('interval-shot', namespace='/socket')
-def interval_shot(message):
+def interval_shot(message: dict):
+    """Set interval to camera"""
     sec = int(message['sec'])
     camera.set_interval(sec)
 
 
 @socketio.on('stop-interval', namespace='/socket')
-def stop_interval(message):
+def stop_interval(message: dict):
+    """Clear interval"""
     camera.clear_interval()
 
 
 @socketio.on('get-all-taken-images', namespace='/socket')
-def send_all_taken_images(message):
+def send_all_taken_images(message: dict):
+    """Send already taken images in this session to client"""
     emit('new-images', list(camera.taken_photos), namespace='/socket')
 
 
