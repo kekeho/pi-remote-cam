@@ -1,6 +1,6 @@
 # pi-remote-cam
 
-Remote control camera  Raspberry Pi and its camera module
+Remote control camera for Raspberry Pi and its camera module
 
 ## Features
 
