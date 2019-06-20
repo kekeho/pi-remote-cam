@@ -8,6 +8,8 @@ from flask_socketio import SocketIO, emit, send
 import uuid
 import zipfile
 from datetime import datetime
+import os
+from glob import glob
 from lib import video
 
 app = Flask(__name__)
@@ -61,5 +63,13 @@ def send_all_taken_images(message):
     emit('new-images', list(camera.taken_photos), namespace='/socket')
 
 
-if __name__ == '__main__': 
-    socketio.run(app, host='0.0.0.0')
+if __name__ == '__main__':
+    try:
+        socketio.run(app, host='0.0.0.0')
+    finally:
+        # Remove cache
+        print('Delete all caches...')
+        del_imgs = glob('static/taken_images/*.jpg')
+        [os.remove(x) for x in del_imgs]
+        print('To shutdown server, re-type ctrl-c. Bye ;D')
+    exit(0)
