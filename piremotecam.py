@@ -74,14 +74,18 @@ def send_all_taken_images(message: dict):
     """Send already taken images in this session to client"""
     emit('new-images', list(camera.taken_photos), namespace='/socket')
 
+def remove_cache():
+    del_imgs = glob('static/taken_images/*.jpg')
+    [os.remove(x) for x in del_imgs]
+
 
 if __name__ == '__main__':
     try:
+        remove_cache()  # init
         socketio.run(app, host='0.0.0.0')
     finally:
         # Remove cache
         print('Delete all caches...')
-        del_imgs = glob('static/taken_images/*.jpg')
-        [os.remove(x) for x in del_imgs]
+        remove_cache()
         print('To shutdown server, re-type ctrl-c. Bye ;D')
     exit(0)
