@@ -14,7 +14,7 @@ from lib import video
 
 
 app = Flask(__name__)  # Flask app
-app.config['SECRET_KEY'] = str(uuid.uuid4)  # Gen random secret key
+app.config['SECRET_KEY'] = str(uuid.uuid4())  # Gen random secret key
 
 socketio = SocketIO(app, async_mode='threading')  # socketio server
 thread = None  # for contain thread list
