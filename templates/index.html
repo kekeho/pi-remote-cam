@@ -38,14 +38,22 @@
     </div>
 
     <div class="row buttons">
-        <div class="col col-4">
+        <div class="col-3">
+            <div class="row">
+                <p id="set-time-indicator"></p>
+            </div>
+            <div class="row">
+                <button id="set-time" class="btn btn-dark btn-lg">Set time</button>
+            </div>
+        </div>
+        <div class="col col-3">
             <button id="shot" class="btn btn-danger btn-lg">Shot</button>
         </div>
-        <div class="col col-4">
+        <div class="col col-3">
             <input type="text" name="interval-sec" id="interval-sec" placeholder="interval sec">
             <button id="interval-shot" shooting='false' class="btn btn-dark btn-lg">Interval</button>
         </div>
-        <div class="col col-4">
+        <div class="col col-3">
             <a href="/download" target="_blank"><button class="btn btn-light btn-lg">Download ZIP</button></a>
         </div>
     </div>

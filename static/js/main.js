@@ -14,6 +14,23 @@ shot_button.onclick = function() {
 };
 
 
+// When click set-time button, get current date from client, send to raspberry pi
+let set_time_button = document.getElementById('set-time');
+set_time_button.onclick = function() {
+    let d = new Date();  // current time
+    socket.emit('set-date', d.toUTCString()); 
+}
+
+socket.on('set-date-result', function(message) {
+    let indicator = document.getElementById('set-time-indicator');
+    if (message === 0) {
+        indicator.innerText = 'updated';
+    } else {
+        indicator.innerText = 'ERROR HAS OCCURRED';
+    }
+});
+
+
 // When click interval-shot button, send signal(set interval or clear) to server
 let interval_shot_button = document.getElementById('interval-shot');
 let interval_sec_param = document.getElementById('interval-sec');

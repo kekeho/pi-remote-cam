@@ -10,6 +10,7 @@ import zipfile
 from datetime import datetime
 import os
 from glob import glob
+import subprocess
 from lib import video
 
 
@@ -73,6 +74,17 @@ def stop_interval(message: dict):
 def send_all_taken_images(message: dict):
     """Send already taken images in this session to client"""
     emit('new-images', list(camera.taken_photos), namespace='/socket')
+
+
+@socketio.on('set-date', namespace='/socket')
+def set_date(message: dict):
+    date = message
+    print('Set time request:', date)
+    cmd = ['sudo', 'date', '-s', date]
+    result = subprocess.run(cmd).returncode
+
+    emit('set-date-result', result, namespace='/socket')
+
 
 def remove_cache():
     del_imgs = glob('static/taken_images/*.jpg')
