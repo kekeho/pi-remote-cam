@@ -97,12 +97,5 @@ def remove_cache():
 
 
 if __name__ == '__main__':
-    try:
-        remove_cache()  # init
-        socketio.run(app, host='0.0.0.0')
-    finally:
-        # Remove cache
-        print('Delete all caches...')
-        remove_cache()
-        print('To shutdown server, re-type ctrl-c. Bye ;D')
-    exit(0)
+    # remove_cache()  # TODO: create clear cache button
+    socketio.run(app, host='0.0.0.0')
