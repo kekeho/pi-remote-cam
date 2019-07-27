@@ -35,7 +35,14 @@ socket.on('set-date-result', function(message) {
 let set_shutter_button = document.getElementById('set-shutterspeed');
 set_shutter_button.onclick = function() {
     let microsec_form = document.getElementById('shutterspeed-form');
-    let microsec = 1 / parseInt(microsec_form.value) * 1e6;
+
+    let microsec = null;
+    if (parseInt(microsec_form.value) === 0) {
+        microsec = 0;  // auto
+    } else {
+        microsec = parseInt(1 / parseInt(microsec_form.value) * 1e6);
+    }
+
     socket.emit('set-shutterspeed', microsec);
 };
 
