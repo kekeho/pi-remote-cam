@@ -77,13 +77,18 @@ def send_all_taken_images(message: dict):
 
 
 @socketio.on('set-date', namespace='/socket')
-def set_date(message: dict):
+def set_date(message: str):
     date = message
     print('Set time request:', date)
     cmd = ['sudo', 'date', '-s', date]
     result = subprocess.run(cmd).returncode
 
     emit('set-date-result', result, namespace='/socket')
+
+
+@socketio.on('set-shutterspeed', namespace='/socket')
+def set_shutterspeed(message: int):
+    camera.set_shutterspoeed(message)
 
 
 def remove_cache():

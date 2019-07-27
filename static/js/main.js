@@ -31,6 +31,15 @@ socket.on('set-date-result', function(message) {
 });
 
 
+// When click shutter speed button, send to raspberry pi
+let set_shutter_button = document.getElementById('set-shutterspeed');
+set_shutter_button.onclick = function() {
+    let microsec_form = document.getElementById('shutterspeed-form');
+    let microsec = 1 / parseInt(microsec_form.value) * 1e6;
+    socket.emit('set-shutterspeed', microsec);
+};
+
+
 // When click interval-shot button, send signal(set interval or clear) to server
 let interval_shot_button = document.getElementById('interval-shot');
 let interval_sec_param = document.getElementById('interval-sec');

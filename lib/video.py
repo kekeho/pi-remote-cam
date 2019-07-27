@@ -19,6 +19,7 @@ class CamThread(threading.Thread):
         super().__init__()
         self.frame = b''  # Realtime image (Jpeg binary)
         self.camera = picamera.PiCamera()  # Camera object
+        self.camera.shutter_speed = 0  # default: auto
         self.save_dir = save_dir  # Place to save photos taken
         self.shot_flag = False  # if True: Shot in next loop
         self.interval = None  # Interval time (sec)
@@ -81,3 +82,12 @@ class CamThread(threading.Thread):
         """Get realtime frame"""
         while True:
             yield self.frame
+    
+    def set_shutterspoeed(self, micro_sec: int):
+        """Set shutter speed
+        Arg:
+            micro_sec:
+                > 0: exposure time [micro_seconds]
+                0: auto
+        """
+        self.camera.shutter_speed = micro_sec
