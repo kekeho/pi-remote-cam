@@ -14,6 +14,21 @@ shot_button.onclick = function() {
 };
 
 
+// When click record button, send signal to server
+let record_button = document.getElementById('record');
+record_button.onclick = function() {
+    if (record_button.innerText === 'Record'){
+        // start recording
+        socket.emit('start_recording');
+        record_button.innerText = 'Stop Record';
+    } else {
+        // stop recording
+        socket.emit('stop_recording');
+        record_button.innerText = 'Record';
+    }
+}
+
+
 // When click set-time button, get current date from client, send to raspberry pi
 let set_time_button = document.getElementById('set-time');
 set_time_button.onclick = function() {

@@ -20,12 +20,14 @@ class CamThread(threading.Thread):
         self.frame = b''  # Realtime image (Jpeg binary)
         self.camera = picamera.PiCamera()  # Camera object
         self.camera.shutter_speed = 0  # default: auto
+        self.camera.framerate = 10
         self.save_dir = save_dir  # Place to save photos taken
         self.shot_flag = False  # if True: Shot in next loop
         self.interval = None  # Interval time (sec)
         self.before_time = time.time()  # Last time taken
         self.socketio = socketio  # socket object
         self.taken_photos = set()  # filename set
+        self.recording_video_filename = None  # None: not recording, str: recording filename
         self.__chache_taken_photos = set()  # cache
 
     def run(self):
@@ -37,9 +39,9 @@ class CamThread(threading.Thread):
             else:
                 # Realtime preview
                 with io.BytesIO() as stream:  # in-memory file pointer
-                    self.camera.resolution = (320, 240)
+                    # self.camera.resolution = (320, 240)
                     self.camera.capture(stream, 'jpeg',
-                                        use_video_port=True)  # Capture
+                                        use_video_port=False)  # Capture
                     stream.seek(0)
                     frame = stream.read()  # Get realtime frame
                 self.frame = (b'--frame\r\n'
@@ -51,7 +53,7 @@ class CamThread(threading.Thread):
         filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.jpg'
         full_filename = os.path.join(self.save_dir, filename)
         self.camera.capture(full_filename)  # Capture
-        self.taken_photos.add(full_filename)
+        self.taken_photos.add('static/' + filename)
 
         self.shot_flag = False
         self.before_time = time.time()  # Update last time taken
@@ -91,3 +93,22 @@ class CamThread(threading.Thread):
                 0: auto
         """
         self.camera.shutter_speed = micro_sec
+    
+    def start_record_video(self):
+        # self.camera.resolution = (1280, 720)  # High-resolution
+        filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.h264'
+        full_filename = os.path.join(self.save_dir, filename)
+
+        self.recording_video_filename = filename
+
+        self.camera.start_recording(full_filename)  # Start recording
+        print('Start recording')
+
+    def stop_recording_video(self):
+        if self.recording_video_filename == None:  # not recording
+            return
+
+        self.camera.stop_recording()  # Stop
+        self.taken_photos.add(self.recording_video_filename)
+        self.recording_video_filename = None
+        print('Stop recording')

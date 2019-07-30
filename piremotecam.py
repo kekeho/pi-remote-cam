@@ -21,7 +21,8 @@ socketio = SocketIO(app, async_mode='threading')  # socketio server
 thread = None  # for contain thread list
 
 # Generate camera instance
-camera = video.CamThread(save_dir='static/taken_images', socketio=socketio)
+taken_images_dir = '/' + os.path.join(*os.path.abspath(__file__).split('/')[:-1], 'static/taken_images')
+camera = video.CamThread(save_dir=taken_images_dir, socketio=socketio)
 camera.start()
 
 
@@ -55,6 +56,16 @@ def download():
 def shot(message: dict):
     """Take a pic"""
     camera.shot()
+
+
+@socketio.on('start_recording', namespace='/socket')
+def start_recording():
+    camera.start_record_video()
+
+
+@socketio.on('stop_recording', namespace='/socket')
+def stop_recording():
+    camera.stop_recording_video()
 
 
 @socketio.on('interval-shot', namespace='/socket')
@@ -92,7 +103,7 @@ def set_shutterspeed(message: int):
 
 
 def remove_cache():
-    del_imgs = glob('static/taken_images/*.jpg')
+    del_imgs = glob(os.path.join(taken_images_dir, '/*.jpg'))
     [os.remove(x) for x in del_imgs]
 
 
