@@ -20,7 +20,7 @@ class CamThread(threading.Thread):
         self.frame = b''  # Realtime image (Jpeg binary)
         self.camera = picamera.PiCamera()  # Camera object
         self.camera.shutter_speed = 0  # default: auto
-        self.camera.framerate = 10
+        self.camera.framerate = 5
         self.save_dir = save_dir  # Place to save photos taken
         self.shot_flag = False  # if True: Shot in next loop
         self.interval = None  # Interval time (sec)
@@ -53,7 +53,7 @@ class CamThread(threading.Thread):
         filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.jpg'
         full_filename = os.path.join(self.save_dir, filename)
         self.camera.capture(full_filename)  # Capture
-        self.taken_photos.add('static/' + filename)
+        self.taken_photos.add('static/taken_images/' + filename)
 
         self.shot_flag = False
         self.before_time = time.time()  # Update last time taken
@@ -99,7 +99,7 @@ class CamThread(threading.Thread):
         filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.h264'
         full_filename = os.path.join(self.save_dir, filename)
 
-        self.recording_video_filename = filename
+        self.recording_video_filename = 'static/taken_images/' + filename
 
         self.camera.start_recording(full_filename)  # Start recording
         print('Start recording')
