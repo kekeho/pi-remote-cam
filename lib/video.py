@@ -20,7 +20,7 @@ class CamThread(threading.Thread):
         self.frame = b''  # Realtime image (Jpeg binary)
         self.camera = picamera.PiCamera()  # Camera object
         self.camera.shutter_speed = 0  # default: auto
-        self.camera.framerate = 5
+        self.camera.framerate = 2
         self.save_dir = save_dir  # Place to save photos taken
         self.shot_flag = False  # if True: Shot in next loop
         self.interval = None  # Interval time (sec)
