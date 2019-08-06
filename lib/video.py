@@ -112,3 +112,10 @@ class CamThread(threading.Thread):
         self.taken_photos.add(self.recording_video_filename)
         self.recording_video_filename = None
         print('Stop recording')
+    
+    def check_recording(self) -> bool:
+        """Check recording or not recording now"""
+        if self.recording_video_filename:
+            return True
+
+        return False

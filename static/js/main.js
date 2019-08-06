@@ -16,6 +16,17 @@ shot_button.onclick = function() {
 
 // When click record button, send signal to server
 let record_button = document.getElementById('record');
+
+// Check recording now
+socket.emit('check_recording');
+socket.on('recording_status', function(t_or_f) {
+   if (t_or_f === true) {
+       record_button.innerText = 'Stop Record';
+   } else {
+       record_button.innerText = 'Record';
+   }
+});
+
 record_button.onclick = function() {
     if (record_button.innerText === 'Record'){
         // start recording

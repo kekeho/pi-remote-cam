@@ -68,6 +68,11 @@ def stop_recording():
     camera.stop_recording_video()
 
 
+@socketio.on('check_recording', namespace='/socket')
+def check_recording():
+    emit('recording_status', camera.check_recording(), namespace='/socket')
+
+
 @socketio.on('interval-shot', namespace='/socket')
 def interval_shot(message: dict):
     """Set interval to camera"""
