@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Copyright (c) 2019 Hiroki Takemura (kekeho)
 #
 # This software is released under the MIT License.

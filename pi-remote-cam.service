@@ -1,0 +1,12 @@
+[Unit]
+Description = "pi-remote-cam service. remote controll camera"
+After = networking.service
+
+
+[Service]
+ExecStart = "/home/pi/pi-remote-cam/piremotecam.py"
+User = pi
+
+
+[Install]
+WantedBy = multi-user.target
