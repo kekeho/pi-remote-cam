@@ -12,15 +12,12 @@ Remote control camera for Raspberry Pi and its camera module
 ## Install
 
 ```sh
-$ git clone https://github.com/kekeho/pi-remote-cam.git
-$ cd pi-remote-cam
-$ pip3 install -r requirements.txt  # install dependencies
+$ wget https://raw.githubusercontent.com/kekeho/pi-remote-cam/master/installer.sh
+$ bash installer.sh [HOSTNAME(Same as SSID)] [WIFI_PASSWORD] [WIFI_COUNTRY]
 ```
 
 ## Start
 
-```sh
-$ python3 piremotecam.py
-```
+Just reboot Raspberry Pi.
 
 then, open browser and access to [YOUR_Pi_IP]:5000

@@ -3,7 +3,7 @@ WIFI_PASSWORD=$2
 WIFI_COUNTRY=$3
 
 # Set hostname & password
-sudo raspi-config noint do_hostname $HOSTNAME
+sudo hostnamectl set-hostname $HOSTNAME
 passwd
 
 sudo apt update
@@ -15,8 +15,8 @@ sudo raspi-config nonint do_wifi_country $WIFI_COUNTRY  # Set Wi-Fi country as J
 yes y | wget -q https://git.io/voEUQ -O /tmp/raspap && bash /tmp/raspap
 
 # Change Wi-Fi SSID & Password
-sudo sed -e "s/raspi-webgui/${HOSTNAME}/g" > /etc/hostapd/hostapd.conf  # SSID
-sudo sed -e "s/ChangeMe/${WIFI_PASSWORD}/g" > /etc/hostapd/hostapd.conf  # password
+sed -e "s/raspi-webgui/${HOSTNAME}/g" /etc/hostapd/hostapd.conf | sudo tee /etc/hostapd/hostapd.conf  # SSID
+sed -e "s/ChangeMe/${WIFI_PASSWORD}/g" /etc/hostapd/hostapd.conf | sudo tee /etc/hostapd/hostapd.conf  # password
 
 # Clone raspi-remote-cam
 cd ~/
