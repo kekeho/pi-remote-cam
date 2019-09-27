@@ -41,7 +41,7 @@ class CamThread(threading.Thread):
                 with io.BytesIO() as stream:  # in-memory file pointer
                     # self.camera.resolution = (320, 240)
                     self.camera.capture(stream, 'jpeg',
-                                        use_video_port=False)  # Capture
+                                        use_video_port=True)  # Capture
                     stream.seek(0)
                     frame = stream.read()  # Get realtime frame
                 self.frame = (b'--frame\r\n'
@@ -52,7 +52,7 @@ class CamThread(threading.Thread):
         self.camera.resolution = (1640, 1232)  # High-resolution
         filename = datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '.jpg'
         full_filename = os.path.join(self.save_dir, filename)
-        self.camera.capture(full_filename)  # Capture
+        self.camera.capture(full_filename, use_video_port=True)  # Capture
         self.taken_photos.add('static/taken_images/' + filename)
 
         self.shot_flag = False
